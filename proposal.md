@@ -26,6 +26,3 @@ I will have a supervised agent that maintains a map of variables and values
 (including the previous answer), and a supervised server that interacts with that agent
 to fetch/set values.
 They will both use a one_for_one strategy because each component will be dependent on the other.
-
-> replace all the ">" lines with your content, then push this to
-> github and issue a merge request.
