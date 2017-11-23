@@ -1,8 +1,6 @@
 defmodule Proj5.Parser do
   
   def parseParen(query,0,_openParen,_parenCount,"") do
-    IO.puts "hi "
-    IO.puts query
     parseParen(query,0,0,0,String.at(query,0))
   end
   
@@ -19,7 +17,8 @@ defmodule Proj5.Parser do
     input = String.slice(query,openParen+1,len)
     output = parseParen(input,0,0,0,"")
     iterator = openParen + String.length(output)
-    query = String.replace_leading(query,input,output)
+    input = "(#{input})"
+    query = String.replace(query,input,output)
     parseParen(query,iterator,openParen,0,String.at(query,iterator))
   end
 
@@ -27,7 +26,7 @@ defmodule Proj5.Parser do
     parseParen(query,iterator + 1,openParen,parenCount - 1,String.at(query,iterator + 1))
   end
 
-  def parseParen(query,iterator,_openParen,_parenCount,nil) do
+  def parseParen(query,_iterator,_openParen,_parenCount,nil) do
     query
   end
 
