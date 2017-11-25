@@ -11,6 +11,6 @@ defmodule Proj5.ParserTest do
   end
 
   test "parseParen test3" do
-    assert Proj5.Parser.parse("4*(7+(3-(5)-(2)/(9*(6))))") == "4*7+3-5-2/9*6"
+    assert Proj5.Parser.parse("4*(7+(3-(5)-(2)/(9*-6)))") == "20.14814814814815"
   end
 end
