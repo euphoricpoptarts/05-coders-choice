@@ -1,4 +1,4 @@
-defmodule MathFunctions do
+defmodule Proj5.MathFunctions do
   
   def sin(x) do
     x - (x*x*x/6)

@@ -1,5 +1,5 @@
-defmodule Proj5.Parser do
-  
+defmodule Parser do
+
   def parseParen(query,0,_openParen,_parenCount,"") do
     parseParen(query,0,0,0,String.at(query,0))
   end
@@ -20,7 +20,8 @@ defmodule Proj5.Parser do
     potentialFun = String.slice(query,0,openParen)
     potentialFun = String.slice(potentialFun,-3,3)
 
-    output = handleSubQuery(input,potentialFun)
+    output = MathFunctions.handleSubQuery(input,potentialFun)
+    output = "#{output}"
     iterator = openParen + String.length(output)
     input = "(#{input})"
     query = String.replace(query,input,output)
@@ -40,8 +41,8 @@ defmodule Proj5.Parser do
   end
 
   def parseOps(query) do
-    params = Regex.split(~r{(?<splitter>[\+\-\/\*])\-?},query,on: [:splitter])
-    ops = Regex.scan(~r{(?<splitter>[\+\-\/\*])\-?},query,on: [:splitter])
+    params = Regex.split(~r{(?<splitter>[\+\-\/\*]|(?:sin|cos|tan|pow|log)|[\+\-\/\*](?:sin|cos|tan|pow|log)?)\-?},query,on: [:splitter], trim: true)
+    ops = Regex.scan(~r{(?<splitter>[\+\-\/\*])(?:sin|cos|tan|pow|log)?\-?},query,on: [:splitter])
     { params, ops } = runMultsAndDivs(params, ops)
     runAddsAndSubs(params, ops)
   end
