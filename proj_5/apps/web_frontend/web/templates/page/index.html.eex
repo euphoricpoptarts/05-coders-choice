@@ -1,0 +1,4 @@
+<form>
+  Enter a query to calculate: <input type="text" name="query"></input>
+  <%= if @render do %><br/><br/>Your query result was: <%= @result %><% end %>
+</form>

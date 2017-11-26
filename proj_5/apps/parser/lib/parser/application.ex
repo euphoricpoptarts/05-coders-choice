@@ -4,4 +4,5 @@ defmodule Parser.Application do
   def start(_type, _args) do
     Parser.Supervisor.start_link(name: Parser.Supervisor)
   end
+
 end

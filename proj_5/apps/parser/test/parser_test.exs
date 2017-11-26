@@ -2,14 +2,6 @@ defmodule ParserTest do
   use ExUnit.Case
   doctest Parser
 
-  test "parse test1" do
-    assert Parser.parse("(1((3)4(7))2)6(11)") == "13472611"
-  end
-
-  test "parse test2" do
-    assert Parser.parse("4(7(3(5)(2)(9(6))))") == "4735296"
-  end
-
   test "parse test3" do
     { ans, _ } = Float.parse(Parser.parse("4*sin(7+(3-(5)-(2)/(9 *-6)))"))
     assert ans - -3.7910521853022568
@@ -38,6 +30,12 @@ defmodule ParserTest do
   test "parse test8" do
     Parser.parse("x <- log(2,8*4)")
     assert Parser.parse("7*x") == "35.0"
+  end
+
+  test "parse test9" do
+    Parser.parse("x <- 42.1")
+    Parser.parse("y <- x/22")
+    assert Parser.parse("sin(x*y)") == "35.0"
   end
 
   test "sin pi/2" do
