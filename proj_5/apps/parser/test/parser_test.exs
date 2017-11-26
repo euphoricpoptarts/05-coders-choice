@@ -30,4 +30,29 @@ defmodule ParserTest do
     assert Parser.parse("log(2,8*4)") == "5.0"
   end
 
+  test "parse test7" do
+    Parser.parse("x <- 7*4")
+    assert VariableServer.getVar("x") == 28
+  end
+
+  test "parse test8" do
+    Parser.parse("x <- log(2,8*4)")
+    assert Parser.parse("7*x") == "35.0"
+  end
+
+  test "sin pi/2" do
+    assert Parser.Funs.handleSubQuery("1.57079632679","sin") - 1 
+    |> Kernel.abs < 0.000005
+  end
+
+  test "cos pi/2" do
+    assert Parser.Funs.handleSubQuery("1.57079632679","cos")
+    |> Kernel.abs < 0.00005
+  end
+
+  test "tan pi/4" do
+    assert Parser.Funs.handleSubQuery("0.78539816339","tan") - 1
+    |> Kernel.abs < 0.001
+  end
+
 end

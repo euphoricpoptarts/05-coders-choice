@@ -1,0 +1,81 @@
+defmodule Parser.SimpleOpsParser do
+
+  def parseOps(query) do
+
+    #splits query on *,/,+,- or sin,cos... or both, and ignores negative signs (- is same as minus) following that
+    #removes the operator symbol and function name but not the minus sign
+    params = Regex.split(~r{(?<splitter>[\+\-\/\*]|(?:sin|cos|tan|pow|log)|[\+\-\/\*](?:sin|cos|tan|pow|log)?)\-?},query,on: [:splitter], trim: true)
+    #finds all occurrences of operators
+    ops = Regex.scan(~r{(?<splitter>[\+\-\/\*])(?:sin|cos|tan|pow|log)?\-?},query,on: [:splitter])
+
+    { params, ops } = runMultsAndDivs(params, ops)
+    runAddsAndSubs(params, ops)
+  end
+
+  def runAddsAndSubs([paramsH | paramsT], [ "+" | opsT]) do
+    [ param2 | paramsT ] = paramsT
+
+    #i don't want to bother checking if this is already a Float
+    #so i interpolate to a string and parse to float
+    paramsH = getVar( Float.parse("#{paramsH}"), paramsH)
+    param2 = getVar( Float.parse("#{param2}"), param2)
+
+    runAddsAndSubs([ paramsH + param2 | paramsT], opsT)
+  end
+
+  def runAddsAndSubs([paramsH | paramsT], [ "-" | opsT]) do
+    [ param2 | paramsT ] = paramsT
+
+    #i don't want to bother checking if this is already a Float
+    #so i interpolate to a string and parse to float
+    paramsH = getVar( Float.parse("#{paramsH}"), paramsH)
+    param2 = getVar( Float.parse("#{param2}"), param2)
+
+    runAddsAndSubs([ paramsH - param2 | paramsT], opsT)
+  end
+
+  def runAddsAndSubs([paramsH | _paramsT], []) do
+    paramsH = getVar( Float.parse("#{paramsH}"), paramsH)
+    "#{paramsH}"
+  end
+
+  def runMultsAndDivs([paramsH | paramsT], [ [_ , "*"] | opsT]) do
+    [ param2 | paramsT ] = paramsT
+
+    #i don't want to bother checking if this is already a Float
+    #so i interpolate to a string and parse to float
+    paramsH = getVar( Float.parse("#{paramsH}"), paramsH)
+    param2 = getVar( Float.parse("#{param2}"), param2)
+
+    { leftParams, leftOps } = runMultsAndDivs([ paramsH * param2 | paramsT], opsT)
+    { leftParams, leftOps }
+  end
+
+  def runMultsAndDivs([paramsH | paramsT], [ [_ , "/"] | opsT]) do
+    [ param2 | paramsT ] = paramsT
+
+    #i don't want to bother checking if this is already a Float
+    #so i interpolate to a string and parse to float
+    paramsH = getVar( Float.parse("#{paramsH}"), paramsH)
+    param2 = getVar( Float.parse("#{param2}"), param2)
+
+    { leftParams, leftOps } = runMultsAndDivs([ paramsH / param2 | paramsT], opsT)
+    { leftParams, leftOps }
+  end
+
+  def runMultsAndDivs([paramsH | paramsT], [ [_ , op] | opsT]) do
+    { leftParams, leftOps } = runMultsAndDivs(paramsT, opsT)
+    { [ paramsH | leftParams ] , [ op | leftOps ] }
+  end
+
+  def runMultsAndDivs([paramsH | _paramsT], [] ) do
+    { [ getVar( Float.parse("#{paramsH}"), paramsH) ] , [] }
+  end
+
+  def getVar({ value, _}, _) do value end
+
+  def getVar(_, key) do 
+    VariableServer.getVar(key) 
+  end
+
+end
