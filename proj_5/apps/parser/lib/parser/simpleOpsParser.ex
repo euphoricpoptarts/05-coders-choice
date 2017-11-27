@@ -2,11 +2,16 @@ defmodule Parser.SimpleOpsParser do
 
   def parseOps(query) do
 
-    #splits query on *,/,+,- or sin,cos... or both, and ignores negative signs (- is same as minus) following that
-    #removes the operator symbol and function name but not the minus sign
-    params = Regex.split(~r{(?<splitter>[\+\-\/\*]|(?:sin|cos|tan|pow|log)|[\+\-\/\*](?:sin|cos|tan|pow|log)?)\-?},query,on: [:splitter], trim: true)
+    #removes the function symbols from the query
+    query = Regex.replace(~r{(?:sin|cos|tan|pow|log)},query,"")
+
+    #splits query on *,/,+,- and ignores negative signs (- is same as minus)
+    #removes the operator symbol but not the minus sign
+    #params = Regex.split(~r{(?<splitter>[\+\-\/\*]|(?:sin|cos|tan|pow|log)|[\+\-\/\*](?:sin|cos|tan|pow|log)?)\-?},query,on: [:splitter], trim: true)
+    params = Regex.split(~r{.(?<splitter>[\+\-\/\*])\-?},query,on: [:splitter], trim: true)
+    
     #finds all occurrences of operators
-    ops = Regex.scan(~r{(?<splitter>[\+\-\/\*])(?:sin|cos|tan|pow|log)?\-?},query,on: [:splitter])
+    ops = Regex.scan(~r{.(?<splitter>[\+\-\/\*])\-?},query,on: [:splitter])
 
     { params, ops } = runMultsAndDivs(params, ops)
     runAddsAndSubs(params, ops)

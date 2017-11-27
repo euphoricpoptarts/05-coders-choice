@@ -33,6 +33,11 @@ x <- log(2,8*4)
 
 y <- 7*x
 
+-1*-2--3+-4
+
+Note however that -tan(some input resulting in a negative value of tan(x)) will produce unexpected results
+If you wish to negate the value of a function that is at the beginning of a query, use -1*tan/sin/cos/pow/log
+
 In the case of a variable assignment, the app will display the value that was assigned.
 
 Do not use a variable unless you have already assigned a value to it, or you will get an error.
@@ -42,6 +47,3 @@ In order to run the app, run
 >mix phx.server
 
 inside the proj_5 folder.
-
-There currently is an error with passing negative values to the functions,
-having to do with the operator-finding regex. Wish I had time to fix it.
