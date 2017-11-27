@@ -42,8 +42,13 @@ In the case of a variable assignment, the app will display the value that was as
 
 Do not use a variable unless you have already assigned a value to it, or you will get an error.
 
+Also please don't end your variable name with "e", scientific notation uses "e" and the regex won't know the right thing to do.
+
 In order to run the app, run
 
 >mix phx.server
 
 inside the proj_5 folder.
+
+If you are interested, before implementing the parser in elixir I made a .js mockup to test some basic things.
+I'm including it in the base directory.
