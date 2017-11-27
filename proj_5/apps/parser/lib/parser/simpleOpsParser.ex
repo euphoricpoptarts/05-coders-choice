@@ -7,11 +7,10 @@ defmodule Parser.SimpleOpsParser do
 
     #splits query on *,/,+,- and ignores negative signs (- is same as minus)
     #removes the operator symbol but not the minus sign
-    #params = Regex.split(~r{(?<splitter>[\+\-\/\*]|(?:sin|cos|tan|pow|log)|[\+\-\/\*](?:sin|cos|tan|pow|log)?)\-?},query,on: [:splitter], trim: true)
-    params = Regex.split(~r{.(?<splitter>[\+\-\/\*])\-?},query,on: [:splitter], trim: true)
+    params = Regex.split(~r{[^e](?<splitter>[\+\-\/\*])\-?},query,on: [:splitter], trim: true)
     
     #finds all occurrences of operators
-    ops = Regex.scan(~r{.(?<splitter>[\+\-\/\*])\-?},query,on: [:splitter])
+    ops = Regex.scan(~r{[^e](?<splitter>[\+\-\/\*])\-?},query,on: [:splitter])
 
     { params, ops } = runMultsAndDivs(params, ops)
     runAddsAndSubs(params, ops)

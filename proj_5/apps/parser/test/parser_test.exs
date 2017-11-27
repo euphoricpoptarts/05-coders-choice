@@ -40,6 +40,12 @@ defmodule ParserTest do
     |> Kernel.abs < 0.00001
   end
 
+  test "parse test8" do
+    { ans, _ } = Float.parse(Parser.parse("sin(3.14159)"))
+    assert ans
+    |> Kernel.abs < 0.00001
+  end
+
   test "sin pi/2" do
     assert Parser.Funs.handleSubQuery("1.57079632679","sin") - 1 
     |> Kernel.abs < 0.000005
