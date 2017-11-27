@@ -2,12 +2,14 @@ defmodule Parser.SimpleOpsParser do
 
   def parseOps(query) do
 
+    #replaces leading minus signs on functions with -1*
+    query = Regex.replace(~r{^\-(?:sin|cos|tan|pow|log)},query,"-1*")
     #removes the function symbols from the query
     query = Regex.replace(~r{(?:sin|cos|tan|pow|log)},query,"")
 
     #splits query on *,/,+,- and ignores negative signs (- is same as minus)
     #removes the operator symbol but not the minus sign
-    params = Regex.split(~r{[^e](?<splitter>[\+\-\/\*])\-?},query,on: [:splitter], trim: true)
+    params = Regex.split(~r{[^(?:/de)](?<splitter>[\+\-\/\*])\-?},query,on: [:splitter], trim: true)
     
     #finds all occurrences of operators
     ops = Regex.scan(~r{[^e](?<splitter>[\+\-\/\*])\-?},query,on: [:splitter])

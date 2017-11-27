@@ -35,14 +35,15 @@ y <- 7*x
 
 -1*-2--3+-4
 
-Note however that -tan(some input resulting in a negative value of tan(x)) will produce unexpected results
-If you wish to negate the value of a function that is at the beginning of a query, use -1*tan/sin/cos/pow/log
+pi <- 3.14159
+
+-cos(pi)
 
 In the case of a variable assignment, the app will display the value that was assigned.
 
 Do not use a variable unless you have already assigned a value to it, or you will get an error.
 
-Also please don't end your variable name with "e", scientific notation uses "e" and the regex won't know the right thing to do.
+Variable names are case sensitive, and may only contain alphabetic characters.
 
 In order to run the app, run
 
